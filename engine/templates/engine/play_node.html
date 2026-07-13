@@ -1,0 +1,73 @@
+{% extends 'engine/base.html' %}
+{% block title %}{{ run.adventure.title }} — DCC: What If?{% endblock %}
+{% block content %}
+
+{% if ai_message %}
+<div id="ai-announcer">{{ ai_message }}</div>
+<script>
+    setTimeout(function () {
+        var toast = document.getElementById('ai-announcer');
+        if (!toast) return;
+        toast.classList.add('fade-out');
+        setTimeout(function () { toast.remove(); }, 500);
+    }, 5000);
+</script>
+{% endif %}
+
+<div class="container">
+    <div class="panel">
+        <button type="button" class="btn" onclick="document.getElementById('inventory-modal').showModal()">Inventory</button>
+    </div>
+
+    <dialog id="inventory-modal">
+        <h2>Inventory</h2>
+        <ul class="inventory-list">
+            {% for item in run.inventory.all %}
+                <li>{{ item.name }} — {{ item.get_item_type_display }}</li>
+            {% empty %}
+                <li>Empty. Bold strategy.</li>
+            {% endfor %}
+        </ul>
+        <form method="dialog">
+            <button type="submit" class="btn">Close</button>
+        </form>
+    </dialog>
+
+    <div class="panel">
+        {% if node.image %}
+            <img class="node-image" src="{{ node.image.url }}" alt="">
+        {% endif %}
+        <div class="node-text">{{ node.content_text|linebreaks }}</div>
+    </div>
+
+    {% if node.is_death %}
+        <div class="panel">
+            <h1 class="death-text">GAME OVER</h1>
+            <p>Did you really think that was going to work?</p>
+            <a href="{% url 'restart_run' run.id %}" class="btn btn-death">Try Again (Without Your Stuff)</a>
+            <a href="{% url 'hub' %}" class="btn">Return to Hub in Shame</a>
+        </div>
+    {% elif node.is_victory %}
+        <div class="panel">
+            <h1 class="victory-text">VICTORY</h1>
+            <a href="{% url 'hub' %}" class="btn">Return to Hub</a>
+        </div>
+    {% else %}
+        <div class="panel options-list">
+            {% for option in options %}
+                {% if option.disabled %}
+                    <button type="button" class="btn btn-locked" disabled>
+                        &#128274; {{ option.button_text }}
+                        <span class="requirement-text">Requires: {{ option.required_item.name }}</span>
+                    </button>
+                {% else %}
+                    <form method="POST" action="{% url 'process_choice' run.id option.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn">{{ option.button_text }}</button>
+                    </form>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

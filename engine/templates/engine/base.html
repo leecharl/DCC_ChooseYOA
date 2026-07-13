@@ -1,0 +1,21 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Dungeon Crawler Carl: Choose Your Own Adventure{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'engine/css/dcc.css' %}">
+</head>
+<body>
+    <nav class="site-nav">
+        <a href="{% if user.is_authenticated %}{% url 'hub' %}{% else %}{% url 'landing' %}{% endif %}">DCC: What If?</a>
+        {% if user.is_authenticated %}
+            <form method="POST" action="{% url 'logout' %}" style="margin:0;">
+                {% csrf_token %}
+                <button type="submit" class="btn" style="width:auto;">Log Out</button>
+            </form>
+        {% endif %}
+    </nav>
+    {% block content %}{% endblock %}
+</body>
+</html>

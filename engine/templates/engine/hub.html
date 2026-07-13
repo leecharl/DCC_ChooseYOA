@@ -1,0 +1,44 @@
+{% extends 'engine/base.html' %}
+{% block title %}Hub — DCC: What If?{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="panel">
+        <h1>Your Runs</h1>
+        {% if runs %}
+            {% for run in runs %}
+                <div class="panel">
+                    <p>{{ run.adventure.title }} — {{ run.get_status_display }}</p>
+                    {% if run.status == 'in_progress' %}
+                        <a class="btn" href="{% url 'play_node' run.id run.current_node_id %}">Resume</a>
+                    {% elif run.status == 'dead' %}
+                        <a class="btn btn-death" href="{% url 'restart_run' run.id %}">Try Again</a>
+                    {% else %}
+                        <a class="btn" href="{% url 'play_node' run.id run.current_node_id %}">Relive Your Victory</a>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No runs yet. Pick an adventure below to begin.</p>
+        {% endif %}
+    </div>
+
+    <div class="panel">
+        <h1>Adventures</h1>
+        {% for adventure in adventures %}
+            <div class="panel">
+                {% if adventure.cover_image %}
+                    <img class="node-image" src="{{ adventure.cover_image.url }}" alt="{{ adventure.title }}">
+                {% endif %}
+                <h2>{{ adventure.title }}</h2>
+                <p>{{ adventure.description }}</p>
+                <form method="POST" action="{% url 'start_run' adventure.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn">Start Adventure</button>
+                </form>
+            </div>
+        {% empty %}
+            <p>No adventures published yet.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
