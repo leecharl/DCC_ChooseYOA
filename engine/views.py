@@ -68,6 +68,7 @@ def play_node(request, run_id, node_id):
         return redirect('play_node', run_id=run.id, node_id=run.current_node_id)
 
     ai_message = None
+    ai_messages = []
 
     if node.is_death:
         run.inventory.clear()
@@ -87,7 +88,10 @@ def play_node(request, run_id, node_id):
         for loot in node.loot_drops.select_related('item').all():
             if loot.item not in run.inventory.all():
                 run.inventory.add(loot.item)
-                ai_message = loot.message
+                if loot.message:
+                    ai_messages.append(loot.message)
+        if ai_messages:
+            ai_message = '\n\n'.join(ai_messages)
 
     options = node.options.all()
     inventory_items = run.inventory.all()

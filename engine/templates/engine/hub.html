@@ -8,7 +8,9 @@
             {% for run in runs %}
                 <div class="panel">
                     <p>{{ run.adventure.title }} — {{ run.get_status_display }}</p>
-                    {% if run.status == 'in_progress' %}
+                    {% if not run.current_node_id %}
+                        <p class="requirement-text">This run's story data was reset. Start a fresh run below.</p>
+                    {% elif run.status == 'in_progress' %}
                         <a class="btn" href="{% url 'play_node' run.id run.current_node_id %}">Resume</a>
                     {% elif run.status == 'dead' %}
                         <a class="btn btn-death" href="{% url 'restart_run' run.id %}">Try Again</a>
