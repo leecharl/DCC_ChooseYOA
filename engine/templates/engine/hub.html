@@ -11,11 +11,11 @@
                     {% if not run.current_node_id %}
                         <p class="requirement-text">This run's story data was reset. Start a fresh run below.</p>
                     {% elif run.status == 'in_progress' %}
-                        <a class="btn" href="{% url 'play_node' run.id run.current_node_id %}">Resume</a>
+                        <a class="btn btn-block" href="{% url 'play_node' run.id run.current_node_id %}">Resume</a>
                     {% elif run.status == 'dead' %}
-                        <a class="btn btn-death" href="{% url 'restart_run' run.id %}">Try Again</a>
+                        <a class="btn btn-death btn-block" href="{% url 'restart_run' run.id %}">Try Again</a>
                     {% else %}
-                        <a class="btn" href="{% url 'play_node' run.id run.current_node_id %}">Relive Your Victory</a>
+                        <a class="btn btn-block" href="{% url 'play_node' run.id run.current_node_id %}">Relive Your Victory</a>
                     {% endif %}
                 </div>
             {% endfor %}
@@ -35,7 +35,7 @@
                 <p>{{ adventure.description }}</p>
                 <form method="POST" action="{% url 'start_run' adventure.id %}">
                     {% csrf_token %}
-                    <button type="submit" class="btn">Start Adventure</button>
+                    <button type="submit" class="btn btn-block">Start Adventure</button>
                 </form>
             </div>
         {% empty %}

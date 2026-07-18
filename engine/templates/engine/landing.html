@@ -12,7 +12,7 @@
         <form method="POST">
             {% csrf_token %}
             {{ login_form.as_p }}
-            <button type="submit" name="login_submit" class="btn">Enter the Dungeon</button>
+            <button type="submit" name="login_submit" class="btn btn-block">Enter the Dungeon</button>
         </form>
     </div>
 
@@ -21,7 +21,7 @@
         <form method="POST">
             {% csrf_token %}
             {{ register_form.as_p }}
-            <button type="submit" name="register_submit" class="btn">Sign Up to Crawl</button>
+            <button type="submit" name="register_submit" class="btn btn-block">Sign Up to Crawl</button>
         </form>
     </div>
 </div>
