@@ -8,7 +8,9 @@
 </head>
 <body>
     <nav class="site-nav">
-        <a href="{% if user.is_authenticated %}{% url 'hub' %}{% else %}{% url 'landing' %}{% endif %}">DCC: What If?</a>
+        <a class="site-nav__brand" href="{% if user.is_authenticated %}{% url 'hub' %}{% else %}{% url 'landing' %}{% endif %}">
+            <img src="{% static 'engine/images/title_banner.png' %}" alt="Dungeon Crawler Carl: What If? Choose Your Own Adventure">
+        </a>
         {% if user.is_authenticated %}
             <form method="POST" action="{% url 'logout' %}" style="margin:0;">
                 {% csrf_token %}

@@ -35,6 +35,17 @@ a {
   gap: 0.5rem;
 }
 
+.site-nav__brand {
+  display: block;
+  max-width: 260px;
+}
+
+.site-nav__brand img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 .site-nav a {
   text-decoration: none;
 }
